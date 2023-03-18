@@ -1,0 +1,69 @@
+function SchoolsSportsDay() {
+
+  console.log("Let the games begin");
+
+  // Initialize the score object with 0 points for all colors
+  let scores = { red: 0, blue: 0, green: 0, yellow: 0 };
+
+  // Define the callback functions
+  let Race100MCallback = function (scores, callback) {
+    console.log("Race100M");
+    let times = {};
+    times["red"] = Math.floor(Math.random() * 6 + 10);
+    times["blue"] = Math.floor(Math.random() * 6 + 10);
+    times["green"] = Math.floor(Math.random() * 6 + 10);
+    times["yellow"] = Math.floor(Math.random() * 6 + 10);
+    console.log(times);
+    let sortedTimes = Object.keys(times).sort(function (a, b) {
+      return times[a] - times[b];
+    });
+    scores[sortedTimes[0]] += 50;
+    scores[sortedTimes[1]] += 25;
+    console.log(scores);
+    callback(scores, LongJumpCallback);
+  };
+
+  let LongJumpCallback = function (scores, callback) {
+    console.log("LongJump");
+    let color = ["red", "yellow", "blue", "green"][
+      Math.floor(Math.random() * 4)
+    ];
+    scores[color] += 150;
+    console.log(scores);
+    callback(scores, HighJumpCallback);
+  };
+
+  let HighJumpCallback = function (scores) {
+    console.log("HighJump");
+    let input = prompt("What colour secured the highest jump?");
+    if (input) {
+      input = input.toLowerCase();
+      if (input === "red" || input === "yellow" || input === "blue" || input === "green") {
+        scores[input] += 100;
+      } else {
+        console.log("Event was cancelled");
+      }
+    } else {
+      console.log("Event was cancelled");
+    }
+    console.log(scores);
+    AwardCeremony(scores);
+  };
+
+  // Call the Race100M function
+  setTimeout(function () {
+    Race100MCallback(scores, LongJumpCallback);
+  }, 1000);
+}
+
+function AwardCeremony(scores) {
+  console.log("AwardCeremony");
+  let sortedScores = Object.entries(scores).sort(function (a, b) {
+    return b[1] - a[1];
+  });
+  console.log(
+    `${sortedScores[0][0]} came first with ${sortedScores[0][1]} points. ${sortedScores[1][0]} came second with ${sortedScores[1][1]} points. ${sortedScores[2][0]} came third with ${sortedScores[2][1]} points.`
+  );
+}
+
+SchoolsSportsDay();
